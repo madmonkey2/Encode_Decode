@@ -1,0 +1,43 @@
+def encode(char, is_code=False):
+    special_character = [',', ':', '!', '?', '*', '&', '%', '$', '#', '@', '(', ')']
+    code = ' '
+    char_to_morse_code = {'A': '.-', 'B': '-...',
+                          'C': '-.-.', 'D': '-..', 'E': '.',
+                          'F': '..-.', 'G': '--.', 'H': '....',
+                          'I': '..', 'J': '.---', 'K': '-.-',
+                          'L': '.-..', 'M': '--', 'N': '-.',
+                          'O': '---', 'P': '.--.', 'Q': '--.-',
+                          'R': '.-.', 'S': '...', 'T': '-',
+                          'U': '..-', 'V': '...-', 'W': '.--',
+                          'X': '-..-', 'Y': '-.--', 'Z': '--..',
+                          '1': '.----', '2': '..---', '3': '...--',
+                          '4': '....-', '5': '.....', '6': '-....',
+                          '7': '--...', '8': '---..', '9': '----.',
+                          '0': '-----', ' ': '/'}
+
+    # --------------------------- ENCODE ----------------------------------
+    if is_code == False:
+        for i in char:
+            if i in special_character:
+                pass
+            else:
+                code += f'{char_to_morse_code[i.upper()]}'
+        return code.strip()  # Strip REMOVE leading whitespace
+
+    # --------------------------- DECODE ----------------------------------
+    if is_code == True:
+        char_split = char.split()  # Split making a long string into indexes of string in a LIST.
+        # Ex: "HELLO" after
+        # SPLIT would be ['H' 'E' 'L' 'L' 'O'].
+        for i in range(len(char_split)):  # Use range(len()) to avoid LIST is not STRING TypeError.
+            for key, value in char_to_morse_code.items():
+                if char_split[i] == value:
+                    code += key
+        return ''.join(code).strip()  # STRIP concatenate the separate index into a long string OPPOSITE TO SPLIT
+
+#     Ex: ['H' 'E' 'L' 'L' 'O']
+#     After join method would become "HELLO"
+
+
+char = input("Enter the text to convert to Morse Code if is_code is False or enter Morse Code to convert to text if is_code is True: ")
+print(encode(char, is_code=False))
