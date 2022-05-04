@@ -1,94 +1,61 @@
-def encode(char, is_code=False):
-    special_character = [',', ':', '!', '?', '*', '&', '%', '$', '#', '@', '(', ')']
-    code = ' '
-    char_to_morse_code = {'A': '.-', 'B': '-...',
-                          'C': '-.-.', 'D': '-..', 'E': '.',
-                          'F': '..-.', 'G': '--.', 'H': '....',
-                          'I': '..', 'J': '.---', 'K': '-.-',
-                          'L': '.-..', 'M': '--', 'N': '-.',
-                          'O': '---', 'P': '.--.', 'Q': '--.-',
-                          'R': '.-.', 'S': '...', 'T': '-',
-                          'U': '..-', 'V': '...-', 'W': '.--',
-                          'X': '-..-', 'Y': '-.--', 'Z': '--..',
-                          '1': '.----', '2': '..---', '3': '...--',
-                          '4': '....-', '5': '.....', '6': '-....',
-                          '7': '--...', '8': '---..', '9': '----.',
-                          '0': '-----', ' ': '/'}
-
-    # ---------------------------ENCODE----------------------------------
-    if is_code == False:
-        for i in char:
-            if i in special_character:
-                pass
-            else:
-                code += f'{char_to_morse_code[i.upper()]}'
-        return code.strip()  # Strip REMOVE leading whitespace
-
-    # ---------------------------DECODE----------------------------------
-    if is_code == True:
-        char_split = char.split()  # Split making a long string into indexes of string in a LIST.
-        # Ex: "HELLO" after
-        # SPLIT would be ['H' 'E' 'L' 'L' 'O'].
-        for i in range(len(char_split)):  # Use range(len()) to avoid LIST is not STRING TypeError.
-            for key, value in char_to_morse_code.items():
-                if char_split[i] == value:
-                    code += key
-        return ''.join(code).strip()  # STRIP concatenate the separate index into a long string OPPOSITE TO SPLIT
-
-#     Ex: ['H' 'E' 'L' 'L' 'O']
-#     After join method would become "HELLO"
-
-
-char = input("Enter the text to convert to Morse Code if is_code is False or enter Morse Code to convert to text if is_code is True: ")
-print(encode(char, is_code=True))
-
-
 from tkinter import *
 from functools import partial
-import tkinter.messagebox as tmessage
 
-win = Tk()
+navy = '#203354'
+black = '#000000'
+green = '#00FF00'
+orange = '#FFA500'
+
 codes = {'A': '.-', 'B': '-...',
-        'C': '-.-.', 'D': '-..', 'E': '.',
-        'F': '..-.', 'G': '--.', 'H': '....',
-        'I': '..', 'J': '.---', 'K': '-.-',
-        'L': '.-..', 'M': '--', 'N': '-.',
-        'O': '---', 'P': '.--.', 'Q': '--.-',
-        'R': '.-.', 'S': '...', 'T': '-',
-        'U': '..-', 'V': '...-', 'W': '.--',
-        'X': '-..-', 'Y': '-.--', 'Z': '--..',
-        '1': '.----', '2': '..---', '3': '...--',
-        '4': '....-', '5': '.....', '6': '-....',
-        '7': '--...', '8': '---..', '9': '----.',
-        '0': '-----', ' ': '/'}
+         'C': '-.-.', 'D': '-..', 'E': '.',
+         'F': '..-.', 'G': '--.', 'H': '....',
+         'I': '..', 'J': '.---', 'K': '-.-',
+         'L': '.-..', 'M': '--', 'N': '-.',
+         'O': '---', 'P': '.--.', 'Q': '--.-',
+         'R': '.-.', 'S': '...', 'T': '-',
+         'U': '..-', 'V': '...-', 'W': '.--',
+         'X': '-..-', 'Y': '-.--', 'Z': '--..',
+         '1': '.----', '2': '..---', '3': '...--',
+         '4': '....-', '5': '.....', '6': '-....',
+         '7': '--...', '8': '---..', '9': '----.',
+         '0': '-----', ' ': '/'}
 
 
-# MorseCode To Text
-def sssum(label, x2):
-    n2 = (x2.get())
-    word = n2
-    word += ' '
-    decipher = ''
-    citext = ''
+# ---------------------------- Decode Morse to text ------------------------------- #
 
-    for letter in word:
-        if (letter != ' '):
-            i = 0
-            citext += letter
+def decode(label, x2):
+    word = (x2.get())
+    word += " "
+
+    key_list = list(codes.keys())
+    val_list = list(codes.values())
+
+    # To store morse code in a temp variable
+    morse_code = ""
+    plain_text = ""
+    for letters in word:
+        if letters != " ":
+            morse_code += letters
+            space_found = 0
         else:
-            i += 1
-            if i == 2:
-                decipher += ' '
+            space_found += 1
+            if space_found == 2:
+                plain_text += " "
             else:
-                decipher += list(codes.keys())[list(codes.values()).index(citext)]
-                citext = ''
-    label.config(text=decipher)
-    return decipher
 
-# Text to MorseCode Converter Function
-def sum(label, x1):
-    n1 = (x1.get())
-    code = n1
+                # Accessing the index of the value i.e, morsecode and then from that index finding the key at that index
+                plain_text += key_list[val_list.index(morse_code)]
+
+                # Again making morse_code empty so that it can store next morse in it
+                morse_code = ""
+    label.config(text=plain_text)
+    return f" {plain_text}"
+
+
+# ---------------------------- Encode text to Morse ------------------------------- #
+
+def encode(output, x1):
+    code = (x1.get())
     word = code.upper()
     enc = ""
     for i in word:
@@ -96,46 +63,43 @@ def sum(label, x1):
             enc += codes[i] + " "
         else:
             enc += " "
-    label.config(text=enc)
+    output.config(text=enc)
     return enc
 
 
-# GUI Building
+# ---------------------------- UI SETUP ------------------------------- #
 
-win.title("Exercise_9 Morsecode converter")
-win.configure(background="Blue")
-win.geometry("750x250")
+root = Tk()
+root.title("Exercise9 - Encode/Decode Morse_Code")
+root.config(padx=50, pady=25, bg=navy)
 
-l0 = Label(win, text="Welcome to the MorseCode Converter", fg="BLue", bg="Violet")
-l1 = Label(win, text="Enter the text to be encrypted:  ", fg="BLue", bg="Violet")
-l2 = Label(win, text="Enter the MorseCode to be decyphyered:  ", fg="BLue", bg="Violet")
-label = Label(win, text="Output: ", fg="Blue", bg="Violet")
+title = Label(text="Welcome to the MorseCode Converter!!!", fg=green, bg=black, font=("Times New Roman", 15))
+text_to_morse = Label(text="Enter the text to be encrypted:  ", fg=green, bg=black)
+morse_to_text = Label(text="Enter the MorseCode to be decyphyered:  ", fg=green, bg=black)
+rst = Label(text="Result of the converter: ", fg=green, bg=black)
+output = Label(root, fg=green, bg=black, font=("Times New Roman", 18, 'bold'))
+
 x1 = StringVar()
 x2 = StringVar()
-e1 = Entry(win, textvariable=x1)
-e2 = Entry(win, textvariable=x2)
 
+e1 = Entry(textvariable=x1)
+e2 = Entry(textvariable=x2)
 
-
-
-# Button Is Decleared
-button = Button(win, text="Encrypt", command=sum, fg="BLue", bg="Violet")
-sum = partial(sum, label, x1)
-button2 = Button(win, text="Decrypt", command=sssum, fg="BLue", bg="Violet")
-sssum = partial(sssum, label, x2)
-
-l0.grid(row=2, column=2)
-l1.grid(row=3, column=0)
-l2.grid(row=5, column=0)
+title.grid(row=2, column=2)
+text_to_morse.grid(row=3, column=0, sticky="W")
+morse_to_text.grid(row=5, column=0, sticky="W")
+rst.grid(row=6, column=0, sticky="W")
+output.grid(row=6, column=2)
 e1.grid(row=3, column=2)
 e2.grid(row=5, column=2)
+
+encode = partial(encode, output, x1)
+decode = partial(decode, output, x2)
+
+button = Button(root, text="Encrypt", command=encode, fg=green, bg=black)
+button2 = Button(root, text="Decrypt", command=decode, fg=green, bg=black)
+
 button.grid(row=3, column=3)
 button2.grid(row=5, column=3)
 
-mymenu = Menu(win)
-m1 = Menu(mymenu, tearoff=0)
-win.config(menu=mymenu)
-mymenu.add_cascade(label="File", menu=m1)
-
-
-win.mainloop()
+root.mainloop()
