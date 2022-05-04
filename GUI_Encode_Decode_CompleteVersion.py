@@ -6,6 +6,7 @@ black = '#000000'
 green = '#00FF00'
 orange = '#FFA500'
 
+special_character = [',', ':', '!', '?', '*', '&', '%', '$', '#', '@', '(', ')']
 codes = {'A': '.-', 'B': '-...',
          'C': '-.-.', 'D': '-..', 'E': '.',
          'F': '..-.', 'G': '--.', 'H': '....',
@@ -21,9 +22,24 @@ codes = {'A': '.-', 'B': '-...',
          '0': '-----', ' ': '/'}
 
 
+# ---------------------------- Encode text to Morse ------------------------------- #
+
+def encode(char, x1):
+    code = (x1.get())
+    word = code.upper()
+    enc = ""
+    for i in word:
+        if (i in special_character):
+            pass
+        else:
+            enc += codes[i] + " "
+    char.config(text=enc)
+    return enc
+
+
 # ---------------------------- Decode Morse to text ------------------------------- #
 
-def decode(label, x2):
+def decode(char, x2):
     word = (x2.get())
     word += " "
 
@@ -48,23 +64,8 @@ def decode(label, x2):
 
                 # Again making morse_code empty so that it can store next morse in it
                 morse_code = ""
-    label.config(text=plain_text)
+    char.config(text=plain_text)
     return f" {plain_text}"
-
-
-# ---------------------------- Encode text to Morse ------------------------------- #
-
-def encode(output, x1):
-    code = (x1.get())
-    word = code.upper()
-    enc = ""
-    for i in word:
-        if (i != " "):
-            enc += codes[i] + " "
-        else:
-            enc += " "
-    output.config(text=enc)
-    return enc
 
 
 # ---------------------------- UI SETUP ------------------------------- #
