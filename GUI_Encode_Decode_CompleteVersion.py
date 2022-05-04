@@ -62,7 +62,7 @@ def decode(char, x2):
                 # Accessing the index of the value i.e, morsecode and then from that index finding the key at that index
                 plain_text += key_list[val_list.index(morse_code)]
 
-                # Again making morse_code empty so that it can store next morse in it
+                # Making morse_code empty so that it can store next morse in it
                 morse_code = ""
     char.config(text=plain_text)
     return f" {plain_text}"
